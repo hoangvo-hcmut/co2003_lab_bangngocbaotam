@@ -8,35 +8,21 @@ DLinkedList<T>::Iterator::Iterator(DLinkedList<T> *pList, bool begin)
   this->pList = pList;
   if (begin)
   {
-    if (pList != nullptr)
-    {
-      index = 0;
-      current = pList->head;
-    }
-    else
-    {
-      current = nullptr;
-      index = -1;
-    }
+    index = 0;
+    current = pList->head;
   }
   else
   {
+    // element after end
     current = nullptr;
-    if (pList != nullptr)
-    {
-      index = pList->size();
-    }
-    else
-    {
-      index = 0;
-    }
+    index = pList->size();
   }
 }
 
 template <class T>
 typename DLinkedList<T>::Iterator& DLinkedList<T>::Iterator::operator=(const DLinkedList<T>::Iterator &iterator)
 {
-    current = iterator.current;
+  current = iterator.current;
   index = iterator.index;
   pList = iterator.pList;
   return *this;
@@ -53,7 +39,7 @@ void DLinkedList<T>::Iterator::set(const T &e)
 template<class T>
 T& DLinkedList<T>::Iterator::operator*() 
 {
-     if (current == nullptr)
+  if (current == nullptr)
     throw std::out_of_range("Segmentation fault!");
   return current->data;
 }
@@ -67,14 +53,14 @@ void DLinkedList<T>::Iterator::remove()
     *       If we remove first node of pList, Node* current point to nullptr.
     *       Then we use operator ++, Node* current will point to the head of pList.
     */
-     if (current == nullptr)
+  if (current == nullptr)
   {
     throw std::out_of_range("Segmentation fault!");
   }
   this->pList->removeAt(index);
   if (index == 0) {
-     current = nullptr;
      index = -1;
+     current = nullptr;
   } else {
      index -= 1;
      current = this->pList->head;
@@ -87,7 +73,7 @@ void DLinkedList<T>::Iterator::remove()
 template<class T>
 bool DLinkedList<T>::Iterator::operator!=(const DLinkedList::Iterator &iterator) 
 {
-     return !(this->index == iterator.index && this->current == iterator.current);
+     return !(this->current == iterator.current);
 }
 
 template<class T>
@@ -95,7 +81,9 @@ typename DLinkedList<T>::Iterator& DLinkedList<T>::Iterator::operator++()
 {
      if (current == nullptr)
       {
-        throw std::out_of_range("Segmentation fault!");
+        index = 0;
+        current = this->pList->head;
+        return *this;
       }
     current = current->next;
     index += 1;
